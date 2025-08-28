@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Camera, Save, MapPin, Phone, Award } from 'lucide-react';
+import { Camera, Save, MapPin, Phone, Award, Upload, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const ProfileSection: React.FC = () => {
   const { user, language } = useApp();
   const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -24,6 +26,20 @@ const ProfileSection: React.FC = () => {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setPreviewUrl('');
   };
 
   return (
@@ -61,17 +77,45 @@ const ProfileSection: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="text-center">
               <div className="relative inline-block">
-                <div className={`w-32 h-32 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-bold text-white ${
-                  user?.userType === 'farmer' ? 'bg-green-500' : 'bg-blue-500'
-                }`}>
-                  {user?.name?.charAt(0)?.toUpperCase()}
-                </div>
+                {previewUrl || user?.profilePicture ? (
+                  <img
+                    src={previewUrl || user?.profilePicture}
+                    alt="Profile"
+                    className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg"
+                  />
+                ) : (
+                  <div className={`w-32 h-32 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-bold text-white ${
+                    user?.userType === 'farmer' ? 'bg-green-500' : 'bg-blue-500'
+                  }`}>
+                    {user?.name?.charAt(0)?.toUpperCase()}
+                  </div>
+                )}
                 {isEditing && (
-                  <button className="absolute bottom-0 right-0 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors">
-                    <Camera size={16} />
-                  </button>
+                  <div className="absolute bottom-0 right-0">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="profile-image-upload"
+                    />
+                    <label
+                      htmlFor="profile-image-upload"
+                      className="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors cursor-pointer block"
+                    >
+                      <Camera size={16} />
+                    </label>
+                  </div>
                 )}
               </div>
+              {isEditing && previewUrl && (
+                <button
+                  onClick={removeImage}
+                  className="text-red-500 hover:text-red-700 text-sm font-medium mb-2"
+                >
+                  {language === 'hi' ? 'तस्वीर हटाएं' : language === 'gu' ? 'ચિત્ર હટાવો' : 'Remove Image'}
+                </button>
+              )}
               <h3 className="text-xl font-semibold text-gray-800">{profileData.name}</h3>
               <p className="text-gray-500 capitalize">{user?.userType}</p>
             </div>
