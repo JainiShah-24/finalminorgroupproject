@@ -41,8 +41,8 @@ const OTPVerification: React.FC = () => {
       const mockUser: User = {
         id: '1',
         name: 'John Doe',
-        username: 'john_farmer',
         email: 'john@example.com',
+        phone: '+91 98765 43210',
         userType,
         verified: true
       };

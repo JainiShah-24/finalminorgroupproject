@@ -5,17 +5,31 @@ import { getTranslation } from '../utils/translations';
 import LanguageSelector from './LanguageSelector';
 
 const AuthForm: React.FC = () => {
-  const { language, setCurrentStep, authMode, userType } = useApp();
+  const { language, setCurrentStep, authMode, userType, setUser } = useApp();
   const [formData, setFormData] = useState({
     name: '',
-    username: '',
+    phone: '',
     email: '',
     password: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentStep('otp');
+    if (authMode === 'login') {
+      // Mock login - in real app, verify credentials
+      const mockUser: User = {
+        id: '1',
+        name: formData.name || 'John Doe',
+        email: formData.email,
+        phone: formData.phone || '+91 98765 43210',
+        userType,
+        verified: true
+      };
+      setUser(mockUser);
+      setCurrentStep('dashboard');
+    } else {
+      setCurrentStep('otp');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,27 +117,25 @@ const AuthForm: React.FC = () => {
               </div>
             )}
 
-            {authMode === 'register' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {getTranslation('username', language)}
-                </label>
-                <div className="relative">
-                  <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                    placeholder={language === 'hi' ? 'उपयोगकर्ता नाम चुनें' : 
-                               language === 'gu' ? 'વપરાશકર્તા નામ પસંદ કરો' : 
-                               'Choose a username'}
-                    required
-                  />
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {getTranslation('phone', language)}
+              </label>
+              <div className="relative">
+                <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                  placeholder={language === 'hi' ? '+91 98765 43210' : 
+                             language === 'gu' ? '+91 98765 43210' : 
+                             '+91 98765 43210'}
+                  required
+                />
               </div>
-            )}
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -145,6 +157,25 @@ const AuthForm: React.FC = () => {
               </div>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {getTranslation('password', language)}
+              </label>
+              <div className="relative">
+                <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                  placeholder={language === 'hi' ? 'पासवर्ड दर्ज करें' : 
+                             language === 'gu' ? 'પાસવર્ડ દાખલ કરો' : 
+                             'Enter password'}
+                  required
+                />
+              </div>
+            </div>
             <button
               type="submit"
               className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition-colors ${
@@ -154,9 +185,9 @@ const AuthForm: React.FC = () => {
               }`}
             >
               {authMode === 'register' ? 
-                (language === 'hi' ? 'OTP भेजें' : 
-                 language === 'gu' ? 'OTP મોકલો' : 
-                 'Send OTP') : 
+                (language === 'hi' ? authMode === 'register' ? 'OTP भेजें' : 'लॉगिन' : 
+                 language === 'gu' ? authMode === 'register' ? 'OTP મોકલો' : 'લૉગિન' : 
+                 authMode === 'register' ? 'Send OTP' : 'Login') : 
                 getTranslation('login', language)
               }
             </button>

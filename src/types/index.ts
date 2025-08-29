@@ -1,11 +1,10 @@
 export interface User {
   id: string;
   name: string;
-  username: string;
   email: string;
+  phone: string;
   userType: 'farmer' | 'worker';
   profilePicture?: string;
-  phone?: string;
   location?: string;
   experience?: string;
   skills?: string[];
@@ -18,14 +17,25 @@ export interface Job {
   title: string;
   description: string;
   location: string;
+  state: string;
+  district: string;
   workType: string;
+  jobTypes: string[];
+  landArea: string;
   duration: string;
   payRate: string;
+  paymentType: string;
+  salaryAmount: string;
   requirements: string[];
   workersNeeded: number;
+  additionalBenefits: string[];
   applicants: string[];
   status: 'open' | 'closed' | 'in_progress';
   createdAt: Date;
+  farmerName: string;
+  farmerPhone: string;
+  farmerEmail?: string;
+  images?: string[];
 }
 
 export interface NewsItem {

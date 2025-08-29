@@ -1,34 +1,36 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import Sidebar from '../Sidebar';
-import DashboardHome from './DashboardHome';
+import HomeSection from './HomeSection';
 import ProfileSection from './ProfileSection';
 import FindWorkersSection from './FindWorkersSection';
 import FindWorkSection from './FindWorkSection';
-import LeaseEquipmentSection from './LeaseEquipmentSection';
+import LeaseAssetsSection from './LeaseAssetsSection';
 import NewsSection from './NewsSection';
-import LanguageSelector from '../LanguageSelector';
+import JobListingsSection from './JobListingsSection';
 
 const Dashboard: React.FC = () => {
   const { user } = useApp();
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('home');
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'dashboard':
-        return <DashboardHome />;
+      case 'home':
+        return <HomeSection />;
       case 'profile':
         return <ProfileSection />;
       case 'find-workers':
         return <FindWorkersSection />;
+      case 'job-listings':
+        return <JobListingsSection />;
       case 'find-work':
         return <FindWorkSection />;
-      case 'lease-equipment':
-        return <LeaseEquipmentSection />;
+      case 'lease-assets':
+        return <LeaseAssetsSection />;
       case 'news':
         return <NewsSection />;
       default:
-        return <DashboardHome />;
+        return <HomeSection />;
     }
   };
 
@@ -39,8 +41,6 @@ const Dashboard: React.FC = () => {
         backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1')`
       }}
     >
-      <LanguageSelector />
-      
       <div className="flex h-screen">
         <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         

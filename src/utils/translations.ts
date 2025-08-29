@@ -11,6 +11,36 @@ export const translations: Translations = {
     hi: 'बेहतर कृषि के लिए किसानों और मजदूरों को जोड़ना',
     gu: 'વધુ સારી કૃષિ માટે ખેડૂતો અને કામદારોને જોડવું'
   },
+  phone: {
+    en: 'Phone Number',
+    hi: 'फोन नंबर',
+    gu: 'ફોન નંબર'
+  },
+  password: {
+    en: 'Password',
+    hi: 'पासवर्ड',
+    gu: 'પાસવર્ડ'
+  },
+  home: {
+    en: 'Home',
+    hi: 'होम',
+    gu: 'હોમ'
+  },
+  language: {
+    en: 'Language',
+    hi: 'भाषा',
+    gu: 'ભાષા'
+  },
+  leaseAssets: {
+    en: 'Lease Land & Equipment',
+    hi: 'भूमि और उपकरण किराए पर दें',
+    gu: 'જમીન અને સાધનો ભાડે આપો'
+  },
+  jobListings: {
+    en: 'Job Listings',
+    hi: 'नौकरी सूची',
+    gu: 'નોકરી યાદી'
+  },
   loginAsFarmer: {
     en: 'Login as Farmer',
     hi: 'किसान के रूप में लॉगिन',

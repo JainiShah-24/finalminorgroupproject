@@ -2,7 +2,7 @@ import React from 'react';
 import { Users, Briefcase, DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const DashboardHome: React.FC = () => {
+const HomeSection: React.FC = () => {
   const { user, language } = useApp();
 
   const farmerStats = [
@@ -194,4 +194,4 @@ const DashboardHome: React.FC = () => {
   );
 };
 
-export default DashboardHome;
+export default HomeSection;
