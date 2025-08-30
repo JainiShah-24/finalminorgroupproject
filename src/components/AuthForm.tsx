@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ArrowLeft, User, Mail, UserCheck } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getTranslation } from '../utils/translations';
-import LanguageSelector from './LanguageSelector';
 
 const AuthForm: React.FC = () => {
   const { language, setCurrentStep, authMode, userType, setUser } = useApp();
@@ -46,8 +45,6 @@ const AuthForm: React.FC = () => {
         backgroundImage: `linear-gradient(rgba(154, 205, 50, 0.4), rgba(34, 139, 34, 0.5)), url('https://images.pexels.com/photos/1179229/pexels-photo-1179229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
       }}
     >
-      <LanguageSelector />
-      
       <div className="w-full max-w-md">
         <button
           onClick={() => setCurrentStep('landing')}

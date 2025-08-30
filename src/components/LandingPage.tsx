@@ -2,7 +2,6 @@ import React from 'react';
 import { Tractor, Users, BookOpen, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getTranslation } from '../utils/translations';
-import LanguageSelector from './LanguageSelector';
 
 const LandingPage: React.FC = () => {
   const { language, setCurrentStep, setAuthMode, setUserType } = useApp();
@@ -20,8 +19,6 @@ const LandingPage: React.FC = () => {
         backgroundImage: `linear-gradient(rgba(154, 205, 50, 0.3), rgba(34, 139, 34, 0.4)), url('https://images.pexels.com/photos/2132180/pexels-photo-2132180.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
       }}
     >
-      <LanguageSelector />
-      
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">

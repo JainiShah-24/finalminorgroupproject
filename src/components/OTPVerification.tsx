@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Shield } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getTranslation } from '../utils/translations';
-import LanguageSelector from './LanguageSelector';
 import { User } from '../types';
 
 const OTPVerification: React.FC = () => {
@@ -59,8 +58,6 @@ const OTPVerification: React.FC = () => {
         backgroundImage: `linear-gradient(rgba(154, 205, 50, 0.4), rgba(34, 139, 34, 0.5)), url('https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')`
       }}
     >
-      <LanguageSelector />
-      
       <div className="w-full max-w-md">
         <button
           onClick={() => setCurrentStep('auth')}
