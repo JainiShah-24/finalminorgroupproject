@@ -2,12 +2,21 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
+  contactNumber: string;
   userType: 'farmer' | 'worker';
   profilePicture?: string;
-  location?: string;
+  city?: string;
+  state?: string;
   experience?: string;
   skills?: string[];
+  jobExpertise?: string[];
+  skillLevel?: string;
+  workCapacity?: string;
+  accommodationNeeded?: boolean;
+  timeAvailability?: string;
+  requiredSalary?: string;
+  additionalBenefits?: string[];
   verified: boolean;
 }
 
@@ -30,12 +39,43 @@ export interface Job {
   workersNeeded: number;
   additionalBenefits: string[];
   applicants: string[];
+  requests: JobRequest[];
   status: 'open' | 'closed' | 'in_progress';
   createdAt: Date;
   farmerName: string;
   farmerPhone: string;
   farmerEmail?: string;
   images?: string[];
+  urgencyLevel: string;
+  workingHours: string;
+  accommodationType: string;
+  transportationProvided: boolean;
+  skillLevel: string;
+  physicalDemands: string;
+  customJobType?: string;
+}
+
+export interface JobRequest {
+  id: string;
+  jobId: string;
+  workerId: string;
+  workerName: string;
+  workerPhone: string;
+  workerEmail?: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  appliedAt: Date;
+  message?: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'job_application' | 'request_accepted' | 'request_rejected' | 'new_job';
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+  actionUrl?: string;
 }
 
 export interface NewsItem {

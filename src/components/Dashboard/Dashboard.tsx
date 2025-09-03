@@ -8,6 +8,7 @@ import FindWorkSection from './FindWorkSection';
 import LeaseAssetsSection from './LeaseAssetsSection';
 import NewsSection from './NewsSection';
 import JobListingsSection from './JobListingsSection';
+import NotificationsSection from './NotificationsSection';
 
 const Dashboard: React.FC = () => {
   const { user } = useApp();
@@ -29,6 +30,8 @@ const Dashboard: React.FC = () => {
         return <LeaseAssetsSection />;
       case 'news':
         return <NewsSection />;
+      case 'notifications':
+        return <NotificationsSection />;
       default:
         return <HomeSection />;
     }

@@ -120,6 +120,41 @@ export const translations: Translations = {
     en: 'Logout',
     hi: 'लॉगआउट',
     gu: 'લૉગઆઉટ'
+  },
+  signUpWithGoogle: {
+    en: 'Sign up with Google',
+    hi: 'Google के साथ साइन अप करें',
+    gu: 'Google સાથે સાઇન અપ કરો'
+  },
+  loginWithGoogle: {
+    en: 'Login with Google',
+    hi: 'Google के साथ लॉगिन करें',
+    gu: 'Google સાથે લૉગિન કરો'
+  },
+  contactNumber: {
+    en: 'Contact Number',
+    hi: 'संपर्क नंबर',
+    gu: 'સંપર્ક નંબર'
+  },
+  city: {
+    en: 'City',
+    hi: 'शहर',
+    gu: 'શહેર'
+  },
+  state: {
+    en: 'State',
+    hi: 'राज्य',
+    gu: 'રાજ્ય'
+  },
+  profilePicture: {
+    en: 'Profile Picture',
+    hi: 'प्रोफाइल तस्वीर',
+    gu: 'પ્રોફાઇલ ચિત્ર'
+  },
+  notifications: {
+    en: 'Notifications',
+    hi: 'सूचनाएं',
+    gu: 'સૂચનાઓ'
   }
 };
 
