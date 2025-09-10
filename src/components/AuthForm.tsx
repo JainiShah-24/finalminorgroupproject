@@ -3,6 +3,7 @@ import { ArrowLeft, User, Phone, Upload, X, UserCheck, Mail, Lock, Eye, EyeOff }
 import { useApp } from '../context/AppContext';
 import { getTranslation } from '../utils/translations';
 import { User as UserType } from '../types';
+import { indianStatesAndCities } from '../utils/cityData';
 
 const AuthForm: React.FC = () => {
   const { language, setCurrentStep, authMode, userType, setUser } = useApp();
