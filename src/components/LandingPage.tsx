@@ -485,8 +485,8 @@ const FindWorkersSection: React.FC = () => {
                 <span className="text-yellow-500">★</span>
                 <span className="text-sm font-medium text-gray-700">{worker.rating}</span>
                 <span className="text-xs text-gray-500">({worker.completedJobs} jobs)</span>
-              </div>
-            </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2 drop-shadow-sm">{getTranslation('loginAsWorker', language)}</h3>
+              <p className="text-gray-700 font-medium bg-gray-50 px-4 py-2 rounded-lg border">{language === 'hi' ? 'खेती में काम पाएं' : language === 'gu' ? 'ખેતીમાં કામ મેળવો' : 'Find work in farming'}</p>
 
             <div className="space-y-3">
               <div>

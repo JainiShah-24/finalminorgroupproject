@@ -5,6 +5,7 @@ import { getTranslation } from '../utils/translations';
 import { User as UserType } from '../types';
 import { indianStatesAndCities } from '../utils/cityData';
 import { indianStatesAndCities } from '../utils/cityData';
+import { indianStatesAndCities } from '../utils/cityData';
 
 const AuthForm: React.FC = () => {
   const { language, setCurrentStep, authMode, userType, setUser } = useApp();
@@ -233,8 +234,7 @@ const AuthForm: React.FC = () => {
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      type="text"
+                    <select
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -279,7 +279,6 @@ const AuthForm: React.FC = () => {
                       value={formData.city}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white/90 backdrop-blur-sm font-medium"
-                      required
                     />
                   </div>
 
@@ -296,6 +295,12 @@ const AuthForm: React.FC = () => {
                       required
                     >
                       <option value="">
+                        {language === 'hi' ? 'शहर चुनें' : language === 'gu' ? 'શહેર પસંદ કરો' : 'Select City'}
+                      </option>
+                      {formData.state && indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities]?.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
                         {language === 'hi' ? 'शहर चुनें' : language === 'gu' ? 'શહેર પસંદ કરો' : 'Select City'}
                       </option>
                       {formData.state && indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities]?.map((city) => (
