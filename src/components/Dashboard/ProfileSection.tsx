@@ -9,18 +9,11 @@ const ProfileSection: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
-    contactNumber: user?.contactNumber || '',
+    phone: user?.phone || '',
     email: user?.email || '',
-    city: user?.city || '',
-    state: user?.state || '',
-    // Worker specific fields
-    jobExpertise: user?.jobExpertise?.join(', ') || '',
-    skillLevel: user?.skillLevel || '',
-    workCapacity: user?.workCapacity || '',
-    accommodationNeeded: user?.accommodationNeeded || false,
-    timeAvailability: user?.timeAvailability || '',
-    requiredSalary: user?.requiredSalary || '',
-    additionalBenefits: user?.additionalBenefits?.join(', ') || ''
+    location: user?.location || '',
+    experience: user?.experience || '',
+    skills: user?.skills?.join(', ') || '',
   });
 
   const handleSave = () => {
@@ -28,7 +21,7 @@ const ProfileSection: React.FC = () => {
     // Here you would typically save to backend
   };
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string) => {
     setProfileData(prev => ({
       ...prev,
       [field]: value
@@ -150,18 +143,18 @@ const ProfileSection: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <Phone size={16} className="inline mr-1" />
-                  {language === 'hi' ? 'संपर्क नंबर' : language === 'gu' ? 'સંપર્ક નંબર' : 'Contact Number'}
+                  {language === 'hi' ? 'फोन नंबर' : language === 'gu' ? 'ફોન નંબર' : 'Phone Number'}
                 </label>
                 {isEditing ? (
                   <input
                     type="tel"
-                    value={profileData.contactNumber}
-                    onChange={(e) => handleInputChange('contactNumber', e.target.value)}
+                    value={profileData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     placeholder="+91 98765 43210"
                   />
                 ) : (
-                  <p className="py-2 text-gray-800">{profileData.contactNumber || 'Not provided'}</p>
+                  <p className="py-2 text-gray-800">{profileData.phone || 'Not provided'}</p>
                 )}
               </div>
 
@@ -175,193 +168,75 @@ const ProfileSection: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <MapPin size={16} className="inline mr-1" />
-                  {language === 'hi' ? 'शहर' : language === 'gu' ? 'શહેર' : 'City'}
+                  {language === 'hi' ? 'स्थान' : language === 'gu' ? 'સ્થાન' : 'Location'}
                 </label>
                 {isEditing ? (
                   <input
                     type="text"
-                    value={profileData.city}
-                    onChange={(e) => handleInputChange('city', e.target.value)}
+                    value={profileData.location}
+                    onChange={(e) => handleInputChange('location', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    placeholder={language === 'hi' ? 'शहर, राज्य' : language === 'gu' ? 'શહેર, રાજ્ય' : 'City, State'}
                   />
                 ) : (
-                  <p className="py-2 text-gray-800">{profileData.city || 'Not provided'}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === 'hi' ? 'राज्य' : language === 'gu' ? 'રાજ્ય' : 'State'}
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={profileData.state}
-                    onChange={(e) => handleInputChange('state', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  />
-                ) : (
-                  <p className="py-2 text-gray-800">{profileData.state || 'Not provided'}</p>
+                  <p className="py-2 text-gray-800">{profileData.location || 'Not provided'}</p>
                 )}
               </div>
             </div>
 
-            {/* Worker Specific Fields */}
-            {user?.userType === 'worker' && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <Award size={16} className="inline mr-1" />
-                    {language === 'hi' ? 'विशेषज्ञता' : language === 'gu' ? 'નિપુણતા' : 'Job Expertise'}
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={profileData.jobExpertise}
-                      onChange={(e) => handleInputChange('jobExpertise', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      placeholder="Harvesting, Planting, etc."
-                    />
-                  ) : (
-                    <p className="py-2 text-gray-800">{profileData.jobExpertise || 'Not specified'}</p>
-                  )}
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Award size={16} className="inline mr-1" />
+                {language === 'hi' ? 'अनुभव' : language === 'gu' ? 'અનુભવ' : 'Experience'}
+              </label>
+              {isEditing ? (
+                <textarea
+                  value={profileData.experience}
+                  onChange={(e) => handleInputChange('experience', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  placeholder={
+                    user?.userType === 'farmer' 
+                      ? (language === 'hi' ? 'अपने खेती के अनुभव के बारे में बताएं' : 
+                         language === 'gu' ? 'તમારા ખેતીના અનુભવ વિશે જણાવો' : 
+                         'Tell us about your farming experience')
+                      : (language === 'hi' ? 'अपने काम के अनुभव के बारे में बताएं' : 
+                         language === 'gu' ? 'તમારા કામના અનુભવ વિશે જણાવો' : 
+                         'Tell us about your work experience')
+                  }
+                />
+              ) : (
+                <p className="py-2 text-gray-800">{profileData.experience || 'No experience added yet'}</p>
+              )}
+            </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'hi' ? 'कौशल स्तर' : language === 'gu' ? 'કૌશલ્ય સ્તર' : 'Skill Level'}
-                    </label>
-                    {isEditing ? (
-                      <select
-                        value={profileData.skillLevel}
-                        onChange={(e) => handleInputChange('skillLevel', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      >
-                        <option value="">Select Level</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="experienced">Experienced</option>
-                        <option value="expert">Expert</option>
-                      </select>
-                    ) : (
-                      <p className="py-2 text-gray-800 capitalize">{profileData.skillLevel || 'Not specified'}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'hi' ? 'कार्य क्षमता' : language === 'gu' ? 'કાર્ય ક્ષમતા' : 'Work Capacity'}
-                    </label>
-                    {isEditing ? (
-                      <select
-                        value={profileData.workCapacity}
-                        onChange={(e) => handleInputChange('workCapacity', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      >
-                        <option value="">Select Capacity</option>
-                        <option value="light">Light Work</option>
-                        <option value="moderate">Moderate Work</option>
-                        <option value="heavy">Heavy Work</option>
-                      </select>
-                    ) : (
-                      <p className="py-2 text-gray-800 capitalize">{profileData.workCapacity || 'Not specified'}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'hi' ? 'समय उपलब्धता' : language === 'gu' ? 'સમય ઉપલબ્ધતા' : 'Time Availability'}
-                    </label>
-                    {isEditing ? (
-                      <select
-                        value={profileData.timeAvailability}
-                        onChange={(e) => handleInputChange('timeAvailability', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      >
-                        <option value="">Select Availability</option>
-                        <option value="full-time">Full Time</option>
-                        <option value="part-time">Part Time</option>
-                        <option value="seasonal">Seasonal</option>
-                        <option value="flexible">Flexible</option>
-                      </select>
-                    ) : (
-                      <p className="py-2 text-gray-800 capitalize">{profileData.timeAvailability || 'Not specified'}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'hi' ? 'आवश्यक वेतन' : language === 'gu' ? 'જરૂરી પગાર' : 'Required Salary'}
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={profileData.requiredSalary}
-                        onChange={(e) => handleInputChange('requiredSalary', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        placeholder="₹500/day or ₹15000/month"
-                      />
-                    ) : (
-                      <p className="py-2 text-gray-800">{profileData.requiredSalary || 'Not specified'}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'hi' ? 'आवास की आवश्यकता' : language === 'gu' ? 'આવાસની જરૂર' : 'Accommodation Needed'}
-                  </label>
-                  {isEditing ? (
-                    <div className="flex space-x-4">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name="accommodationNeeded"
-                          checked={profileData.accommodationNeeded === true}
-                          onChange={() => handleInputChange('accommodationNeeded', true)}
-                          className="mr-2"
-                        />
-                        Yes
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name="accommodationNeeded"
-                          checked={profileData.accommodationNeeded === false}
-                          onChange={() => handleInputChange('accommodationNeeded', false)}
-                          className="mr-2"
-                        />
-                        No
-                      </label>
-                    </div>
-                  ) : (
-                    <p className="py-2 text-gray-800">
-                      {profileData.accommodationNeeded ? 'Yes' : 'No'}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'hi' ? 'अतिरिक्त लाभ' : language === 'gu' ? 'વધારાના ફાયદા' : 'Additional Benefits'}
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={profileData.additionalBenefits}
-                      onChange={(e) => handleInputChange('additionalBenefits', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      placeholder="Housing, Food, Health Insurance, etc."
-                    />
-                  ) : (
-                    <p className="py-2 text-gray-800">{profileData.additionalBenefits || 'None specified'}</p>
-                  )}
-                </div>
-              </>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {user?.userType === 'farmer' 
+                  ? (language === 'hi' ? 'विशेषता' : language === 'gu' ? 'વિશેષતા' : 'Specialization')
+                  : (language === 'hi' ? 'कौशल' : language === 'gu' ? 'કૌશલ્ય' : 'Skills')
+                }
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={profileData.skills}
+                  onChange={(e) => handleInputChange('skills', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  placeholder={
+                    user?.userType === 'farmer' 
+                      ? (language === 'hi' ? 'जैसे: गेहूं, चावल, सब्जी' : 
+                         language === 'gu' ? 'જેવા કે: ઘઉં, ચાવલ, શાકભાજી' : 
+                         'e.g: Wheat, Rice, Vegetables')
+                      : (language === 'hi' ? 'जैसे: हार्वेस्टिंग, ट्रैक्टर चलाना' : 
+                         language === 'gu' ? 'જેવા કે: લણણી, ટ્રેક્ટર ચલાવવું' : 
+                         'e.g: Harvesting, Tractor Operation')
+                  }
+                />
+              ) : (
+                <p className="py-2 text-gray-800">{profileData.skills || 'No skills added yet'}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

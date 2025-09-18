@@ -2,21 +2,14 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  phone?: string;
   contactNumber: string;
   userType: 'farmer' | 'worker';
   profilePicture?: string;
   city?: string;
   state?: string;
-  // Worker specific fields
   experience?: string;
   skills?: string[];
-  jobExpertise?: string[];
-  skillLevel?: string;
-  workCapacity?: string;
-  accommodationNeeded?: boolean;
-  timeAvailability?: string;
-  requiredSalary?: string;
-  additionalBenefits?: string[];
   jobExpertise?: string[];
   skillLevel?: string;
   workCapacity?: string;

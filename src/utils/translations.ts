@@ -136,46 +136,6 @@ export const translations: Translations = {
     hi: 'संपर्क नंबर',
     gu: 'સંપર્ક નંબર'
   },
-  password: {
-    en: 'Password',
-    hi: 'पासवर्ड',
-    gu: 'પાસવર્ડ'
-  },
-  confirmPassword: {
-    en: 'Confirm Password',
-    hi: 'पासवर्ड की पुष्टि करें',
-    gu: 'પાસવર્ડની પુષ્ટિ કરો'
-  },
-  expertise: {
-    en: 'Expertise',
-    hi: 'विशेषज्ञता',
-    gu: 'નિપુણતા'
-  },
-  skillLevel: {
-    en: 'Skill Level',
-    hi: 'कौशल स्तर',
-    gu: 'કૌશલ્ય સ્તર'
-  },
-  workCapacity: {
-    en: 'Work Capacity',
-    hi: 'कार्य क्षमता',
-    gu: 'કાર્ય ક્ષમતા'
-  },
-  timeAvailability: {
-    en: 'Time Availability',
-    hi: 'समय उपलब्धता',
-    gu: 'સમય ઉપલબ્ધતા'
-  },
-  requiredSalary: {
-    en: 'Required Salary',
-    hi: 'आवश्यक वेतन',
-    gu: 'જરૂરી પગાર'
-  },
-  accommodationNeeded: {
-    en: 'Accommodation Needed',
-    hi: 'आवास की आवश्यकता',
-    gu: 'આવાસની જરૂર'
-  },
   city: {
     en: 'City',
     hi: 'शहर',
