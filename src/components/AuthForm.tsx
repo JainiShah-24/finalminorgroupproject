@@ -3,9 +3,6 @@ import { ArrowLeft, User, Phone, Upload, X, UserCheck, Mail, Lock, Eye, EyeOff }
 import { useApp } from '../context/AppContext';
 import { getTranslation } from '../utils/translations';
 import { User as UserType } from '../types';
-import { indianStatesAndCities } from '../utils/cityData';
-import { indianStatesAndCities } from '../utils/cityData';
-import { indianStatesAndCities } from '../utils/cityData';
 
 const AuthForm: React.FC = () => {
   const { language, setCurrentStep, authMode, userType, setUser } = useApp();
@@ -234,7 +231,8 @@ const AuthForm: React.FC = () => {
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <select
+                    <input
+                      type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -274,11 +272,14 @@ const AuthForm: React.FC = () => {
                       {getTranslation('city', language)}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
-                    <select
+                    <input
+                      type="text"
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white/90 backdrop-blur-sm font-medium"
+                      placeholder={language === 'hi' ? 'शहर का नाम' : language === 'gu' ? 'શહેરનું નામ' : 'City name'}
+                      required
                     />
                   </div>
 
@@ -295,18 +296,6 @@ const AuthForm: React.FC = () => {
                       required
                     >
                       <option value="">
-                        {language === 'hi' ? 'शहर चुनें' : language === 'gu' ? 'શહેર પસંદ કરો' : 'Select City'}
-                      </option>
-                      {formData.state && indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities]?.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
-                    </select>
-                        {language === 'hi' ? 'शहर चुनें' : language === 'gu' ? 'શહેર પસંદ કરો' : 'Select City'}
-                      </option>
-                      {formData.state && indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities]?.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
-                    </select>
                         {language === 'hi' ? 'राज्य चुनें' : language === 'gu' ? 'રાજ્ય પસંદ કરો' : 'Select State'}
                       </option>
                       {states.map((state) => (
@@ -524,20 +513,15 @@ const AuthForm: React.FC = () => {
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <select
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="w-full pl-10 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white/90 backdrop-blur-sm font-medium"
+                    placeholder="Confirm your password"
                     required
-                  >
-                    <option value="">
-                      {language === 'hi' ? 'शहर चुनें' : language === 'gu' ? 'શહેર પસંદ કરો' : 'Select City'}
-                    </option>
-                    {formData.state && indianStatesAndCities[formData.state as keyof typeof indianStatesAndCities]?.map((city) => (
-                      <option key={city} value={city}>{city}</option>
-                    ))}
-                  </select>
+                  />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
