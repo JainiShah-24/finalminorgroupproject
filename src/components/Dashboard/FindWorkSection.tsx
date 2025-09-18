@@ -55,7 +55,7 @@ const FindWorkSection: React.FC = () => {
   const mockJobs = [
     {
       id: '1',
-      title: 'Wheat Harvesting Work',
+      title: 'Skilled Worker Requirement - Wheat Harvesting',
       farmerName: 'Rajesh Kumar',
       location: 'Punjab, India',
       workType: 'Harvesting',
@@ -68,7 +68,7 @@ const FindWorkSection: React.FC = () => {
     },
     {
       id: '2',
-      title: 'Vegetable Farm Maintenance',
+      title: 'Worker Requirement - Vegetable Farm Maintenance',
       farmerName: 'Priya Patel',
       location: 'Gujarat, India',
       workType: 'General Farm Work',
@@ -81,7 +81,7 @@ const FindWorkSection: React.FC = () => {
     },
     {
       id: '3',
-      title: 'Tomato Planting',
+      title: 'Skilled Worker Requirement - Tomato Planting',
       farmerName: 'Suresh Singh',
       location: 'Maharashtra, India',
       workType: 'Planting',
