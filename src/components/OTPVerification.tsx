@@ -36,13 +36,16 @@ const OTPVerification: React.FC = () => {
     const otpValue = otp.join('');
     
     if (otpValue.length === 6) {
-      // Mock user creation
+      // Mock user creation - in real app, this would come from registration data
       const mockUser: User = {
         id: '1',
         name: 'John Doe',
         email: 'john@example.com',
-        phone: '+91 98765 43210',
+        contactNumber: '+91 98765 43210',
+        city: 'Mumbai',
+        state: 'Maharashtra',
         userType,
+        profilePicture: '',
         verified: true
       };
       
