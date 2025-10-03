@@ -38,12 +38,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1')`
-      }}
-    >
+    <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen">
         <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         
