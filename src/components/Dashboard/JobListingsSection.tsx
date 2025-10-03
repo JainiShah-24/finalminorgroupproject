@@ -1,9 +1,48 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle, Plus, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const JobListingsSection: React.FC = () => {
   const { language } = useApp();
+  const [showJobForm, setShowJobForm] = useState(false);
+  const [jobData, setJobData] = useState({
+    jobTitle: '',
+    jobTypes: [] as string[],
+    landArea: '',
+    workersNeeded: '',
+    customJobType: ''
+  });
+
+  const jobTypes = [
+    { value: 'harvesting', label: { en: 'Harvesting', hi: 'कटाई', gu: 'લણણી' } },
+    { value: 'planting', label: { en: 'Planting', hi: 'बुआई', gu: 'વાવેતર' } },
+    { value: 'general', label: { en: 'General Farm Work', hi: 'सामान्य खेती का काम', gu: 'સામાન્ય ખેતીનું કામ' } },
+    { value: 'water', label: { en: 'Water Management', hi: 'जल प्रबंधन', gu: 'પાણી વ્યવસ્થાપન' } },
+    { value: 'machinery', label: { en: 'Machinery Operation', hi: 'मशीन संचालन', gu: 'મશીન સંચાલન' } }
+  ];
+
+  const handleJobTypeChange = (type: string) => {
+    setJobData(prev => ({
+      ...prev,
+      jobTypes: prev.jobTypes.includes(type)
+        ? prev.jobTypes.filter(t => t !== type)
+        : [...prev.jobTypes, type]
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Job posted:', jobData);
+    setShowJobForm(false);
+    // Reset form
+    setJobData({
+      jobTitle: '',
+      jobTypes: [],
+      landArea: '',
+      workersNeeded: '',
+      customJobType: ''
+    });
+  };
 
   const mockJobs = [
     {
