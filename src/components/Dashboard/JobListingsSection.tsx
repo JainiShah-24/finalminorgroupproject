@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle, Plus, X } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Eye, CreditCard as Edit, Trash2, CheckCircle, Plus, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const JobListingsSection: React.FC = () => {
