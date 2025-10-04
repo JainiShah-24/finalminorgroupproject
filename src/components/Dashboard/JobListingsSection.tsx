@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Eye, CreditCard as Edit, Trash2, CheckCircle, Plus, X } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle, Plus, X, Upload } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { indianStatesAndCities } from '../../utils/cityData';
 
 const JobListingsSection: React.FC = () => {
   const { language } = useApp();
   const [showJobForm, setShowJobForm] = useState(false);
+  const [jobImages, setJobImages] = useState<File[]>([]);
   const [jobData, setJobData] = useState({
     jobTitle: '',
     jobTypes: [] as string[],
     landArea: '',
     workersNeeded: '',
+    jobDuration: '',
+    paymentType: '',
+    salaryAmount: '',
+    urgencyLevel: '',
+    skillLevel: '',
+    physicalDemands: '',
+    workingHours: '',
+    accommodationType: '',
+    transportationProvided: false,
+    additionalBenefits: [] as string[],
+    state: '',
+    city: '',
+    jobDescription: '',
     customJobType: ''
   });
 
@@ -18,7 +33,17 @@ const JobListingsSection: React.FC = () => {
     { value: 'planting', label: { en: 'Planting', hi: 'बुआई', gu: 'વાવેતર' } },
     { value: 'general', label: { en: 'General Farm Work', hi: 'सामान्य खेती का काम', gu: 'સામાન્ય ખેતીનું કામ' } },
     { value: 'water', label: { en: 'Water Management', hi: 'जल प्रबंधन', gu: 'પાણી વ્યવસ્થાપન' } },
-    { value: 'machinery', label: { en: 'Machinery Operation', hi: 'मशीन संचालन', gu: 'મશીન સંચાલન' } }
+    { value: 'machinery', label: { en: 'Machinery Operation', hi: 'मशीन संचालन', gu: 'મશીન સંચાલન' } },
+    { value: 'crop-care', label: { en: 'Crop Care', hi: 'फसल देखभाल', gu: 'પાક સંભાળ' } },
+    { value: 'livestock', label: { en: 'Livestock Care', hi: 'पशुधन देखभाल', gu: 'પશુધન સંભાળ' } }
+  ];
+
+  const additionalBenefitsOptions = [
+    { value: 'housing', label: { en: 'Housing', hi: 'आवास', gu: 'આવાસ' } },
+    { value: 'food', label: { en: 'Food', hi: 'भोजन', gu: 'ભોજન' } },
+    { value: 'health', label: { en: 'Health Insurance', hi: 'स्वास्थ्य बीमा', gu: 'આરોગ્ય વીમો' } },
+    { value: 'transport', label: { en: 'Transportation', hi: 'परिवहन', gu: 'પરિવહન' } },
+    { value: 'bonus', label: { en: 'Performance Bonus', hi: 'प्रदर्शन बोनस', gu: 'પ્રદર્શન બોનસ' } }
   ];
 
   const handleJobTypeChange = (type: string) => {
@@ -30,9 +55,27 @@ const JobListingsSection: React.FC = () => {
     }));
   };
 
+  const handleBenefitChange = (benefit: string) => {
+    setJobData(prev => ({
+      ...prev,
+      additionalBenefits: prev.additionalBenefits.includes(benefit)
+        ? prev.additionalBenefits.filter(b => b !== benefit)
+        : [...prev.additionalBenefits, benefit]
+    }));
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setJobImages(prev => [...prev, ...files].slice(0, 5)); // Max 5 images
+  };
+
+  const removeImage = (index: number) => {
+    setJobImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Job posted:', jobData);
+    console.log('Job posted:', jobData, jobImages);
     setShowJobForm(false);
     // Reset form
     setJobData({
@@ -40,8 +83,22 @@ const JobListingsSection: React.FC = () => {
       jobTypes: [],
       landArea: '',
       workersNeeded: '',
+      jobDuration: '',
+      paymentType: '',
+      salaryAmount: '',
+      urgencyLevel: '',
+      skillLevel: '',
+      physicalDemands: '',
+      workingHours: '',
+      accommodationType: '',
+      transportationProvided: false,
+      additionalBenefits: [],
+      state: '',
+      city: '',
+      jobDescription: '',
       customJobType: ''
     });
+    setJobImages([]);
   };
 
   const mockJobs = [
@@ -84,86 +141,17 @@ const JobListingsSection: React.FC = () => {
       description: 'Regular farm maintenance work including weeding, watering, and plant care.',
       farmerName: 'Priya Patel',
       farmerPhone: '+91 87654 32109'
-    },
-    {
-      id: '3',
-      title: 'Tomato Planting Project',
-      location: 'Maharashtra, India',
-      state: 'Maharashtra',
-      district: 'Pune',
-      jobTypes: ['planting'],
-      landArea: '8',
-      duration: 'one-time',
-      paymentType: 'per-acre',
-      salaryAmount: '2000',
-      workersNeeded: 8,
-      additionalBenefits: ['housing'],
-      applicants: 15,
-      status: 'in_progress' as const,
-      createdAt: new Date('2025-01-13'),
-      description: 'Seasonal tomato planting work. Training provided for new workers.',
-      farmerName: 'Suresh Singh',
-      farmerPhone: '+91 76543 21098'
     }
   ];
 
   const getJobTypeLabel = (type: string) => {
-    const labels: any = {
-      harvesting: { en: 'Harvesting', hi: 'कटाई', gu: 'લણણી' },
-      planting: { en: 'Planting', hi: 'बुआई', gu: 'વાવેતર' },
-      general: { en: 'General Work', hi: 'सामान्य काम', gu: 'સામાન્ય કામ' },
-      'crop-care': { en: 'Crop Care', hi: 'फसल देखभाल', gu: 'પાક સંભાળ' }
-    };
-    return labels[type]?.[language] || type;
-  };
-
-  const getDurationLabel = (duration: string) => {
-    const labels: any = {
-      'one-time': { en: 'One-time', hi: 'एक बार', gu: 'એક વાર' },
-      'part-time': { en: 'Part-time', hi: 'अंशकालिक', gu: 'અંશકાલિક' },
-      'full-time': { en: 'Full-time', hi: 'पूर्णकालिक', gu: 'પૂર્ણકાલિક' }
-    };
-    return labels[duration]?.[language] || duration;
-  };
-
-  const getPaymentTypeLabel = (type: string) => {
-    const labels: any = {
-      fixed: { en: 'Fixed', hi: 'निश्चित', gu: 'નિશ્ચિત' },
-      hourly: { en: 'Hourly', hi: 'घंटे के हिसाब', gu: 'કલાકના હિસાબે' },
-      'per-acre': { en: 'Per Acre', hi: 'प्रति एकड़', gu: 'પ્રતિ એકર' }
-    };
-    return labels[type]?.[language] || type;
+    const jobType = jobTypes.find(jt => jt.value === type);
+    return jobType ? jobType.label[language as keyof typeof jobType.label] : type;
   };
 
   const getBenefitLabel = (benefit: string) => {
-    const labels: any = {
-      housing: { en: 'Housing', hi: 'आवास', gu: 'આવાસ' },
-      food: { en: 'Food', hi: 'भोजन', gu: 'ભોજન' },
-      health: { en: 'Health', hi: 'स्वास्थ्य', gu: 'આરોગ્ય' }
-    };
-    return labels[benefit]?.[language] || benefit;
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'open':
-        return 'bg-green-100 text-green-800';
-      case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'closed':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getStatusLabel = (status: string) => {
-    const labels: any = {
-      open: { en: 'Open', hi: 'खुला', gu: 'ખુલ્લું' },
-      in_progress: { en: 'In Progress', hi: 'प्रगति में', gu: 'પ્રગતિમાં' },
-      closed: { en: 'Closed', hi: 'बंद', gu: 'બંધ' }
-    };
-    return labels[status]?.[language] || status;
+    const benefitOption = additionalBenefitsOptions.find(b => b.value === benefit);
+    return benefitOption ? benefitOption.label[language as keyof typeof benefitOption.label] : benefit;
   };
 
   return (
@@ -180,8 +168,8 @@ const JobListingsSection: React.FC = () => {
         >
           <Plus size={18} />
           <span>
-            {language === 'hi' ? 'नई नौकरी पोस्ट करें' : 
-             language === 'gu' ? 'નવી નોકરી પોસ્ટ કરો' : 
+            {language === 'hi' ? 'नई नौकरी बनाएं' : 
+             language === 'gu' ? 'નવી નોકરી બનાવો' : 
              'Create New Job'}
           </span>
         </button>
@@ -194,8 +182,8 @@ const JobListingsSection: React.FC = () => {
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-xl">
               <div className="flex justify-between items-center">
                 <h3 className="text-2xl font-bold text-gray-800">
-                  {language === 'hi' ? 'नई नौकरी पोस्ट करें' : 
-                   language === 'gu' ? 'નવી નોકરી પોસ્ટ કરો' : 
+                  {language === 'hi' ? 'नई नौकरी बनाएं' : 
+                   language === 'gu' ? 'નવી નોકરી બનાવો' : 
                    'Create New Job'}
                 </h3>
                 <button
@@ -260,9 +248,9 @@ const JobListingsSection: React.FC = () => {
                   value={jobData.jobTitle}
                   onChange={(e) => setJobData({...jobData, jobTitle: e.target.value})}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder={language === 'hi' ? 'जैसे: कुशल मजदूर की आवश्यकता' : 
-                             language === 'gu' ? 'જેવા કે: કુશળ કામદારની જરૂર' : 
-                             'e.g: Skilled Worker Requirement'}
+                  placeholder={language === 'hi' ? 'जैसे: कुशल मजदूर की आवश्यकता - गेहूं की कटाई' : 
+                             language === 'gu' ? 'જેવા કે: કુશળ કામદારની જરૂર - ઘઉંની લણણી' : 
+                             'e.g: Skilled Worker Requirement - Wheat Harvesting'}
                   required
                 />
               </div>
@@ -288,7 +276,7 @@ const JobListingsSection: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    {language === 'hi' ? 'कितने मजदूर चाहिए' : language === 'gu' ? 'કેટલા કામદાર જોઈએ' : 'How Many Workers Needed'}
+                    {language === 'hi' ? 'कितने मजदूर चाहिए' : language === 'gu' ? 'કેટલા કામદાર જોઈએ' : 'Number of Workers Needed'}
                     <span className="text-red-500 ml-1">*</span>
                   </label>
                   <input
@@ -304,7 +292,322 @@ const JobListingsSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Rest of the form fields... */}
+              {/* Job Duration and Payment Type */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'काम की अवधि' : language === 'gu' ? 'કામની અવધિ' : 'Job Duration'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.jobDuration}
+                    onChange={(e) => setJobData({...jobData, jobDuration: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Duration</option>
+                    <option value="1-day">1 Day</option>
+                    <option value="2-3-days">2-3 Days</option>
+                    <option value="1-week">1 Week</option>
+                    <option value="2-weeks">2 Weeks</option>
+                    <option value="1-month">1 Month</option>
+                    <option value="seasonal">Seasonal</option>
+                    <option value="ongoing">Ongoing</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'भुगतान का प्रकार' : language === 'gu' ? 'ચુકવણીનો પ્રકાર' : 'Payment Type'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.paymentType}
+                    onChange={(e) => setJobData({...jobData, paymentType: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Payment Type</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="per-acre">Per Acre</option>
+                    <option value="fixed">Fixed Amount</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Salary Amount and Urgency Level */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'वेतन राशि (₹)' : language === 'gu' ? 'પગારની રકમ (₹)' : 'Salary Amount (₹)'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="100"
+                    value={jobData.salaryAmount}
+                    onChange={(e) => setJobData({...jobData, salaryAmount: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    placeholder="500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'तात्कालिकता का स्तर' : language === 'gu' ? 'તાત્કાલિકતાનું સ્તર' : 'Urgency Level'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.urgencyLevel}
+                    onChange={(e) => setJobData({...jobData, urgencyLevel: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Urgency</option>
+                    <option value="low">Low - Can wait 1-2 weeks</option>
+                    <option value="medium">Medium - Need within a week</option>
+                    <option value="high">High - Need within 2-3 days</option>
+                    <option value="urgent">Urgent - Need immediately</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Required Skill Level and Physical Demands */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'आवश्यक कौशल स्तर' : language === 'gu' ? 'જરૂરી કૌશલ્ય સ્તર' : 'Required Skill Level'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.skillLevel}
+                    onChange={(e) => setJobData({...jobData, skillLevel: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Skill Level</option>
+                    <option value="beginner">Beginner - No experience needed</option>
+                    <option value="intermediate">Intermediate - Some experience</option>
+                    <option value="experienced">Experienced - 2+ years</option>
+                    <option value="expert">Expert - 5+ years</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'शारीरिक मांग' : language === 'gu' ? 'શારીરિક માંગ' : 'Physical Demands'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.physicalDemands}
+                    onChange={(e) => setJobData({...jobData, physicalDemands: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Physical Demands</option>
+                    <option value="light">Light - Minimal physical effort</option>
+                    <option value="moderate">Moderate - Regular physical work</option>
+                    <option value="heavy">Heavy - Intensive physical labor</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Working Hours and Accommodation */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'दैनिक कार्य घंटे' : language === 'gu' ? 'દૈનિક કામના કલાકો' : 'Working Hours per Day'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.workingHours}
+                    onChange={(e) => setJobData({...jobData, workingHours: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Working Hours</option>
+                    <option value="4-hours">4 Hours</option>
+                    <option value="6-hours">6 Hours</option>
+                    <option value="8-hours">8 Hours (Full Day)</option>
+                    <option value="10-hours">10 Hours</option>
+                    <option value="flexible">Flexible Hours</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'आवास का प्रकार' : language === 'gu' ? 'આવાસનો પ્રકાર' : 'Accommodation Type'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.accommodationType}
+                    onChange={(e) => setJobData({...jobData, accommodationType: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select Accommodation</option>
+                    <option value="not-provided">Not Provided</option>
+                    <option value="shared-room">Shared Room</option>
+                    <option value="private-room">Private Room</option>
+                    <option value="family-accommodation">Family Accommodation</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Transportation and State/City */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    {language === 'hi' ? 'परिवहन सुविधा' : language === 'gu' ? 'પરિવહન સુવિધા' : 'Transportation Facility'}
+                  </label>
+                  <div className="flex space-x-6">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="transportationProvided"
+                        checked={jobData.transportationProvided === true}
+                        onChange={() => setJobData(prev => ({ ...prev, transportationProvided: true }))}
+                        className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                      />
+                      <span className="ml-2 text-gray-700">Provided</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="transportationProvided"
+                        checked={jobData.transportationProvided === false}
+                        onChange={() => setJobData(prev => ({ ...prev, transportationProvided: false }))}
+                        className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                      />
+                      <span className="ml-2 text-gray-700">Not Provided</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'राज्य' : language === 'gu' ? 'રાજ્ય' : 'State'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.state}
+                    onChange={(e) => setJobData({...jobData, state: e.target.value, city: ''})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  >
+                    <option value="">Select State</option>
+                    {Object.keys(indianStatesAndCities).map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {language === 'hi' ? 'शहर' : language === 'gu' ? 'શહેર' : 'City'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <select
+                    value={jobData.city}
+                    onChange={(e) => setJobData({...jobData, city: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                    disabled={!jobData.state}
+                  >
+                    <option value="">Select City</option>
+                    {jobData.state && indianStatesAndCities[jobData.state as keyof typeof indianStatesAndCities]?.map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Additional Benefits */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  {language === 'hi' ? 'अतिरिक्त लाभ' : language === 'gu' ? 'વધારાના ફાયદા' : 'Additional Benefits'}
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {additionalBenefitsOptions.map((benefit) => (
+                    <label key={benefit.value} className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={jobData.additionalBenefits.includes(benefit.value)}
+                        onChange={() => handleBenefitChange(benefit.value)}
+                        className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{benefit.label[language as keyof typeof benefit.label]}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Job Description (Optional) */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  {language === 'hi' ? 'काम का विवरण (वैकल्पिक)' : language === 'gu' ? 'કામનું વર્ણન (વૈકલ્પિક)' : 'Job Description (Optional)'}
+                </label>
+                <textarea
+                  value={jobData.jobDescription}
+                  onChange={(e) => setJobData({...jobData, jobDescription: e.target.value})}
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  placeholder={language === 'hi' ? 'काम के बारे में अतिरिक्त जानकारी...' : 
+                             language === 'gu' ? 'કામ વિશે વધારાની માહિતી...' : 
+                             'Additional details about the work...'}
+                />
+              </div>
+
+              {/* Image Upload (Optional) */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  {language === 'hi' ? 'तस्वीरें अपलोड करें (वैकल्पिक, अधिकतम 5)' : 
+                   language === 'gu' ? 'ચિત્રો અપલોડ કરો (વૈકલ્પિક, મહત્તમ 5)' : 
+                   'Upload Images (Optional, Max 5)'}
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="job-images"
+                  />
+                  <label
+                    htmlFor="job-images"
+                    className="cursor-pointer flex flex-col items-center justify-center"
+                  >
+                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                    <span className="text-gray-600">Click to upload images</span>
+                  </label>
+                  
+                  {jobImages.length > 0 && (
+                    <div className="mt-4 grid grid-cols-3 gap-4">
+                      {jobImages.map((image, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={URL.createObjectURL(image)}
+                            alt={`Job image ${index + 1}`}
+                            className="w-full h-20 object-cover rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Submit Buttons */}
               <div className="flex space-x-4 pt-6 border-t border-gray-200">
                 <button
@@ -366,9 +669,7 @@ const JobListingsSection: React.FC = () => {
               <Clock className="w-5 h-5 text-yellow-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-800">
-                {mockJobs.filter(job => job.status === 'in_progress').length}
-              </p>
+              <p className="text-2xl font-bold text-gray-800">2</p>
               <p className="text-sm text-gray-600">
                 {language === 'hi' ? 'प्रगति में' : language === 'gu' ? 'પ્રગતિમાં' : 'In Progress'}
               </p>
@@ -401,8 +702,8 @@ const JobListingsSection: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
                   <h3 className="text-xl font-semibold text-gray-800">{job.title}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(job.status)}`}>
-                    {getStatusLabel(job.status)}
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {job.status === 'open' ? (language === 'hi' ? 'खुला' : language === 'gu' ? 'ખુલ્લું' : 'Open') : 'Closed'}
                   </span>
                 </div>
                 
@@ -413,11 +714,11 @@ const JobListingsSection: React.FC = () => {
                   </span>
                   <span className="flex items-center">
                     <Clock size={14} className="mr-1" />
-                    {getDurationLabel(job.duration)}
+                    {job.duration}
                   </span>
                   <span className="flex items-center">
                     <DollarSign size={14} className="mr-1" />
-                    ₹{job.salaryAmount}/{getPaymentTypeLabel(job.paymentType)}
+                    ₹{job.salaryAmount}/{job.paymentType}
                   </span>
                   <span className="flex items-center">
                     <Users size={14} className="mr-1" />
@@ -472,16 +773,6 @@ const JobListingsSection: React.FC = () => {
             </div>
           </div>
         ))}
-
-        {mockJobs.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-500 mb-4">
-              <Users size={48} className="mx-auto mb-2" />
-              <p>{language === 'hi' ? 'कोई नौकरी पोस्ट नहीं की गई' : language === 'gu' ? 'કોઈ નોકરી પોસ્ટ કરી નથી' : 'No jobs posted yet'}</p>
-              <p className="text-sm">{language === 'hi' ? 'नई नौकरी पोस्ट करने के लिए "मजदूर खोजें" पर जाएं' : language === 'gu' ? 'નવી નોકરી પોસ્ટ કરવા માટે "કામદાર શોધો" પર જાઓ' : 'Go to "Find Workers" to post a new job'}</p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

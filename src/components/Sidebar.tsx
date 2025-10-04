@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
             <li key={item.id}>
               <button
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left font-medium ${
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left font-medium hover:bg-gray-100 ${
                   activeSection === item.id
                     ? 'bg-green-100 text-green-700'
                     : 'text-gray-700 hover:bg-gray-100'
