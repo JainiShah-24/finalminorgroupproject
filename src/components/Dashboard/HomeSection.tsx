@@ -1,9 +1,39 @@
 import React from 'react';
-import { Users, Briefcase, DollarSign, TrendingUp } from 'lucide-react';
+import { Users, Briefcase, DollarSign, TrendingUp, Bell, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useState } from 'react';
 
 const HomeSection: React.FC = () => {
   const { user } = useApp();
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const notifications = [
+    {
+      id: '1',
+      title: 'New Job Application',
+      message: 'Ramesh Kumar has applied for your wheat harvesting job.',
+      time: '2 hours ago',
+      unread: true
+    },
+    {
+      id: '2',
+      title: 'Request Accepted',
+      message: user?.userType === 'farmer' 
+        ? 'Priya Patel has accepted your work request.'
+        : 'Rajesh Kumar has accepted your application.',
+      time: '1 day ago',
+      unread: false
+    },
+    {
+      id: '3',
+      title: 'New Job Available',
+      message: 'New vegetable farming work available in your area.',
+      time: '3 days ago',
+      unread: true
+    }
+  ];
+
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   const farmerStats = [
     {
@@ -100,16 +130,86 @@ const HomeSection: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Message */}
-      <div className="bg-green-600 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Welcome, {user?.name}!
-        </h1>
-        <p className="text-green-100">
-          {user?.userType === 'farmer' ? 
-            'You have received 3 new applications today.' :
-            'You have 5 new job opportunities today.'
-          }
-        </p>
+      <div className="bg-green-600 rounded-xl p-6 text-white relative">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              Welcome, {user?.name}!
+            </h1>
+            <p className="text-green-100">
+              {user?.userType === 'farmer' ? 
+                'You have received 3 new applications today.' :
+                'You have 5 new job opportunities today.'
+              }
+            </p>
+          </div>
+          
+          {/* Notification Bell */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 text-white hover:bg-green-700 rounded-lg transition-colors"
+            >
+              <Bell size={24} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+            
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                <div className="p-4 border-b border-gray-200">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-gray-800">Notifications</h3>
+                    <button
+                      onClick={() => setShowNotifications(false)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="max-h-96 overflow-y-auto">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`p-4 border-b border-gray-100 hover:bg-gray-50 ${
+                        notification.unread ? 'bg-blue-50' : ''
+                      }`}
+                    >
+                      <div className="flex items-start space-x-3">
+                        {notification.unread && (
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        )}
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium text-gray-800">
+                            {notification.title}
+                          </h4>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {notification.message}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-2">
+                            {notification.time}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="p-3 border-t border-gray-200">
+                  <button className="w-full text-center text-sm text-green-600 hover:text-green-700 font-medium">
+                    View All Notifications
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}

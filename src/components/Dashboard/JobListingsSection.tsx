@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Eye, CreditCard as Edit, Trash2, CheckCircle, Plus, X, Upload } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle, Plus, X, Upload } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { indianStatesAndCities } from '../../utils/cityData';
 
 const JobListingsSection: React.FC = () => {
-  const { language } = useApp();
+  const { user, language } = useApp();
   const [showJobForm, setShowJobForm] = useState(false);
   const [jobImages, setJobImages] = useState<File[]>([]);
   const [jobData, setJobData] = useState({
     jobTitle: '',
     jobTypes: [] as string[],
+    customJobType: '',
     landArea: '',
     workersNeeded: '',
     jobDuration: '',
@@ -22,10 +23,11 @@ const JobListingsSection: React.FC = () => {
     accommodationType: '',
     transportationProvided: false,
     additionalBenefits: [] as string[],
+    customAdditionalBenefits: '',
     state: '',
     city: '',
     jobDescription: '',
-    customJobType: ''
+    contactInfo: user?.fullAddress || ''
   });
 
   const jobTypes = [
@@ -75,12 +77,25 @@ const JobListingsSection: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (jobData.jobTypes.length === 0 && !jobData.customJobType) {
+      alert('Please select at least one job type or specify a custom job type!');
+      return;
+    }
+    
+    if (jobData.additionalBenefits.length === 0 && !jobData.customAdditionalBenefits) {
+      alert('Please select at least one additional benefit or specify other benefits!');
+      return;
+    }
+    
     console.log('Job posted:', jobData, jobImages);
     setShowJobForm(false);
     // Reset form
     setJobData({
       jobTitle: '',
       jobTypes: [],
+      customJobType: '',
       landArea: '',
       workersNeeded: '',
       jobDuration: '',
@@ -93,10 +108,11 @@ const JobListingsSection: React.FC = () => {
       accommodationType: '',
       transportationProvided: false,
       additionalBenefits: [],
+      customAdditionalBenefits: '',
       state: '',
       city: '',
       jobDescription: '',
-      customJobType: ''
+      contactInfo: user?.fullAddress || ''
     });
     setJobImages([]);
   };
@@ -111,7 +127,7 @@ const JobListingsSection: React.FC = () => {
       jobTypes: ['harvesting'],
       landArea: '10',
       duration: 'one-time',
-      paymentType: 'fixed',
+      paymentType: 'per-day',
       salaryAmount: '500',
       workersNeeded: 5,
       additionalBenefits: ['housing', 'food'],
@@ -131,8 +147,8 @@ const JobListingsSection: React.FC = () => {
       jobTypes: ['general', 'crop-care'],
       landArea: '5',
       duration: 'part-time',
-      paymentType: 'hourly',
-      salaryAmount: '50',
+      paymentType: 'per-month',
+      salaryAmount: '15000',
       workersNeeded: 3,
       additionalBenefits: ['food'],
       applicants: 8,
@@ -328,11 +344,8 @@ const JobListingsSection: React.FC = () => {
                     required
                   >
                     <option value="">Select Payment Type</option>
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="per-acre">Per Acre</option>
-                    <option value="fixed">Fixed Amount</option>
+                    <option value="per-day">Per Day</option>
+                    <option value="per-month">Per Month</option>
                   </select>
                 </div>
               </div>
@@ -462,6 +475,7 @@ const JobListingsSection: React.FC = () => {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     {language === 'hi' ? 'परिवहन सुविधा' : language === 'gu' ? 'પરિવહન સુવિધા' : 'Transportation Facility'}
+                    <span className="text-red-500 ml-1">*</span>
                   </label>
                   <div className="flex space-x-6">
                     <label className="flex items-center">
@@ -471,6 +485,7 @@ const JobListingsSection: React.FC = () => {
                         checked={jobData.transportationProvided === true}
                         onChange={() => setJobData(prev => ({ ...prev, transportationProvided: true }))}
                         className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                        required
                       />
                       <span className="ml-2 text-gray-700">Provided</span>
                     </label>
@@ -481,6 +496,7 @@ const JobListingsSection: React.FC = () => {
                         checked={jobData.transportationProvided === false}
                         onChange={() => setJobData(prev => ({ ...prev, transportationProvided: false }))}
                         className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                        required
                       />
                       <span className="ml-2 text-gray-700">Not Provided</span>
                     </label>
@@ -529,6 +545,7 @@ const JobListingsSection: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   {language === 'hi' ? 'अतिरिक्त लाभ' : language === 'gu' ? 'વધારાના ફાયદા' : 'Additional Benefits'}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {additionalBenefitsOptions.map((benefit) => (
@@ -543,6 +560,43 @@ const JobListingsSection: React.FC = () => {
                     </label>
                   ))}
                 </div>
+                
+                {/* Custom Additional Benefits */}
+                <div className="mt-3">
+                  <input
+                    type="text"
+                    value={jobData.customAdditionalBenefits}
+                    onChange={(e) => setJobData({...jobData, customAdditionalBenefits: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    placeholder={language === 'hi' ? 'अन्य लाभ (यदि ऊपर उल्लिखित नहीं है)' : 
+                               language === 'gu' ? 'અન્ય ફાયદા (જો ઉપર ઉલ્લેખિત નથી)' : 
+                               'Other benefits (if not mentioned above)'}
+                    required={jobData.additionalBenefits.length === 0}
+                  />
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  {language === 'hi' ? 'संपर्क जानकारी' : language === 'gu' ? 'સંપર્ક માહિતી' : 'Contact Information'}
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <textarea
+                  value={jobData.contactInfo}
+                  onChange={(e) => setJobData({...jobData, contactInfo: e.target.value})}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  placeholder={language === 'hi' ? 'पूरा पता और संपर्क विवरण' : 
+                             language === 'gu' ? 'સંપૂર્ણ સરનામું અને સંપર્ક વિગતો' : 
+                             'Full address and contact details'}
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {language === 'hi' ? 'नोट: संपर्क जानकारी केवल तभी दिखाई जाएगी जब दोनों पक्ष अनुरोध स्वीकार करें।' :
+                   language === 'gu' ? 'નોંધ: સંપર્ક માહિતી ત્યારે જ દેખાશે જ્યારે બંને પક્ષો વિનંતી સ્વીકારે.' :
+                   'Note: Contact information will be revealed only when both parties accept the request.'}
+                </p>
               </div>
 
               {/* Job Description (Optional) */}
@@ -687,7 +741,7 @@ const JobListingsSection: React.FC = () => {
                 ₹{mockJobs.reduce((sum, job) => sum + parseInt(job.salaryAmount) * job.workersNeeded, 0).toLocaleString()}
               </p>
               <p className="text-sm text-gray-600">
-                {language === 'hi' ? 'कुल बजट' : language === 'gu' ? 'કુલ બજેટ' : 'Total Budget'}
+                {language === 'hi' ? 'कुल बजेट' : language === 'gu' ? 'કુલ બજેટ' : 'Total Budget'}
               </p>
             </div>
           </div>
@@ -718,7 +772,7 @@ const JobListingsSection: React.FC = () => {
                   </span>
                   <span className="flex items-center">
                     <DollarSign size={14} className="mr-1" />
-                    ₹{job.salaryAmount}/{job.paymentType}
+                    ₹{job.salaryAmount}/{job.paymentType.replace('per-', '')}
                   </span>
                   <span className="flex items-center">
                     <Users size={14} className="mr-1" />

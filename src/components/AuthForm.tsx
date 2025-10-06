@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, User, Eye, EyeOff, Upload, X } from 'lucide-react';
+import { ArrowLeft, User, Eye, EyeOff, Upload, X, Wheat, Users } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { indianStatesAndCities } from '../utils/cityData';
 
@@ -18,17 +18,22 @@ const AuthForm: React.FC = () => {
     state: '',
     password: '',
     confirmPassword: '',
+    fullAddress: '',
     // Worker specific fields
     jobExpertise: [] as string[],
+    customJobExpertise: '',
     skillLevel: '',
     workCapacity: '',
-    accommodationNeeded: false,
+    accommodationNeeded: '',
     timeAvailability: '',
+    availabilityDuration: '',
     requiredSalary: '',
-    additionalBenefits: [] as string[]
+    salaryType: '',
+    additionalBenefits: [] as string[],
+    customAdditionalBenefits: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -75,6 +80,14 @@ const AuthForm: React.FC = () => {
         alert('Passwords do not match!');
         return;
       }
+      if (!profileImage) {
+        alert('Profile picture is required!');
+        return;
+      }
+      if (userType === 'worker' && !formData.accommodationNeeded) {
+        alert('Please specify if you need accommodation!');
+        return;
+      }
       // Proceed to OTP verification
       setCurrentStep('otp');
     } else {
@@ -86,17 +99,22 @@ const AuthForm: React.FC = () => {
         contactNumber: formData.contactNumber || '+91 98765 43210',
         city: formData.city,
         state: formData.state,
+        fullAddress: formData.fullAddress,
         userType,
         profilePicture: previewUrl,
         verified: true,
         // Worker specific fields
         jobExpertise: formData.jobExpertise,
+        customJobExpertise: formData.customJobExpertise,
         skillLevel: formData.skillLevel,
         workCapacity: formData.workCapacity,
-        accommodationNeeded: formData.accommodationNeeded,
+        accommodationNeeded: formData.accommodationNeeded === 'yes',
         timeAvailability: formData.timeAvailability,
+        availabilityDuration: formData.availabilityDuration,
         requiredSalary: formData.requiredSalary,
-        additionalBenefits: formData.additionalBenefits
+        salaryType: formData.salaryType,
+        additionalBenefits: formData.additionalBenefits,
+        customAdditionalBenefits: formData.customAdditionalBenefits
       };
       
       setUser(mockUser);
@@ -121,6 +139,28 @@ const AuthForm: React.FC = () => {
     { value: 'transport', label: { en: 'Transportation', hi: 'परिवहन', gu: 'પરિવહન' } }
   ];
 
+  const getLogo = () => {
+    if (userType === 'farmer') {
+      return (
+        <svg width="64" height="64" viewBox="0 0 100 100" className="text-green-600">
+          <circle cx="50" cy="50" r="45" fill="currentColor"/>
+          <path d="M35 25 L65 25 L65 35 L55 35 L55 45 L65 45 L65 55 L55 55 L55 65 L45 65 L45 55 L35 55 L35 45 L45 45 L45 35 L35 35 Z" fill="white"/>
+          <circle cx="30" cy="70" r="8" fill="white"/>
+          <circle cx="70" cy="70" r="8" fill="white"/>
+        </svg>
+      );
+    } else {
+      return (
+        <svg width="64" height="64" viewBox="0 0 100 100" className="text-green-600">
+          <circle cx="50" cy="50" r="45" fill="currentColor"/>
+          <path d="M35 25 L65 25 L65 35 L55 35 L55 45 L65 45 L65 55 L55 55 L55 65 L45 65 L45 55 L35 55 L35 45 L45 45 L45 35 L35 35 Z" fill="white"/>
+          <circle cx="30" cy="70" r="8" fill="white"/>
+          <circle cx="70" cy="70" r="8" fill="white"/>
+        </svg>
+      );
+    }
+  };
+
   return (
     <div 
       className="min-h-screen bg-cover bg-center bg-no-repeat relative flex items-center justify-center p-4"
@@ -128,7 +168,7 @@ const AuthForm: React.FC = () => {
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1')`
       }}
     >
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-4xl">
         <button
           onClick={() => setCurrentStep('landing')}
           className="mb-6 flex items-center space-x-2 text-white hover:text-white/80 transition-colors bg-black/30 backdrop-blur-sm px-4 py-2 rounded-lg font-medium shadow-lg"
@@ -139,10 +179,8 @@ const AuthForm: React.FC = () => {
 
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
           <div className="text-center mb-8">
-            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 shadow-lg ${
-              userType === 'farmer' ? 'bg-green-100' : 'bg-blue-100'
-            }`}>
-              <User className={`w-8 h-8 ${userType === 'farmer' ? 'text-green-600' : 'text-blue-600'}`} />
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 shadow-lg bg-green-50">
+              {getLogo()}
             </div>
             
             <h2 className="text-3xl font-bold text-gray-800 mb-2">
@@ -160,10 +198,10 @@ const AuthForm: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {authMode === 'register' && (
               <>
-                {/* Profile Picture */}
+                {/* Profile Picture - Required */}
                 <div className="text-center">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Profile Picture
+                    Profile Picture <span className="text-red-500">*</span>
                   </label>
                   <div className="relative inline-block">
                     {previewUrl ? (
@@ -191,6 +229,7 @@ const AuthForm: React.FC = () => {
                       accept="image/*"
                       onChange={handleImageUpload}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      required
                     />
                   </div>
                 </div>
@@ -270,6 +309,22 @@ const AuthForm: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Full Address */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Full Address <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    name="fullAddress"
+                    value={formData.fullAddress}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                    placeholder="Enter your complete address"
+                    required
+                  />
+                </div>
+
                 {/* Worker Specific Fields */}
                 {userType === 'worker' && (
                   <>
@@ -290,6 +345,18 @@ const AuthForm: React.FC = () => {
                             <span className="text-sm text-gray-700">{option.label[language as keyof typeof option.label]}</span>
                           </label>
                         ))}
+                      </div>
+                      
+                      {/* Custom Job Expertise */}
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          name="customJobExpertise"
+                          value={formData.customJobExpertise}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                          placeholder="Other expertise (if not mentioned above)"
+                        />
                       </div>
                     </div>
 
@@ -333,7 +400,7 @@ const AuthForm: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Time Availability and Required Salary */}
+                    {/* Time Availability and Duration */}
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -356,33 +423,77 @@ const AuthForm: React.FC = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Required Salary <span className="text-red-500">*</span>
+                          Availability Duration <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="availabilityDuration"
+                          value={formData.availabilityDuration}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                          required
+                        >
+                          <option value="">Select Duration</option>
+                          <option value="1-week">1 Week</option>
+                          <option value="2-weeks">2 Weeks</option>
+                          <option value="1-month">1 Month</option>
+                          <option value="3-months">3 Months</option>
+                          <option value="6-months">6 Months</option>
+                          <option value="1-year">1 Year</option>
+                          <option value="permanent">Permanent</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Expected Salary */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Expected Salary (INR ₹) <span className="text-red-500">*</span>
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="requiredSalary"
                           value={formData.requiredSalary}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
-                          placeholder="₹500/day or ₹15000/month"
+                          placeholder="500"
                           required
                         />
                       </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Payment Type <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="salaryType"
+                          value={formData.salaryType}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                          required
+                        >
+                          <option value="">Select Type</option>
+                          <option value="per-day">Per Day</option>
+                          <option value="per-month">Per Month</option>
+                        </select>
+                      </div>
                     </div>
 
-                    {/* Accommodation Needed */}
+                    {/* Accommodation Needed - Required */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Accommodation Needed
+                        Accommodation Needed <span className="text-red-500">*</span>
                       </label>
                       <div className="flex space-x-6">
                         <label className="flex items-center">
                           <input
                             type="radio"
                             name="accommodationNeeded"
-                            checked={formData.accommodationNeeded === true}
-                            onChange={() => setFormData(prev => ({ ...prev, accommodationNeeded: true }))}
+                            value="yes"
+                            checked={formData.accommodationNeeded === 'yes'}
+                            onChange={handleChange}
                             className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                            required
                           />
                           <span className="ml-2 text-gray-700">Yes</span>
                         </label>
@@ -390,19 +501,21 @@ const AuthForm: React.FC = () => {
                           <input
                             type="radio"
                             name="accommodationNeeded"
-                            checked={formData.accommodationNeeded === false}
-                            onChange={() => setFormData(prev => ({ ...prev, accommodationNeeded: false }))}
+                            value="no"
+                            checked={formData.accommodationNeeded === 'no'}
+                            onChange={handleChange}
                             className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                            required
                           />
                           <span className="ml-2 text-gray-700">No</span>
                         </label>
                       </div>
                     </div>
 
-                    {/* Additional Benefits */}
+                    {/* Additional Benefits Required */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Additional Benefits Required
+                        Additional Benefits Required <span className="text-red-500">*</span>
                       </label>
                       <div className="grid grid-cols-2 gap-3">
                         {additionalBenefitsOptions.map((option) => (
@@ -416,6 +529,19 @@ const AuthForm: React.FC = () => {
                             <span className="text-sm text-gray-700">{option.label[language as keyof typeof option.label]}</span>
                           </label>
                         ))}
+                      </div>
+                      
+                      {/* Custom Additional Benefits */}
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          name="customAdditionalBenefits"
+                          value={formData.customAdditionalBenefits}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                          placeholder="Other benefits (if not mentioned above)"
+                          required={formData.additionalBenefits.length === 0}
+                        />
                       </div>
                     </div>
                   </>

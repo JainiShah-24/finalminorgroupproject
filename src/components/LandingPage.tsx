@@ -67,9 +67,12 @@ const LandingPage: React.FC = () => {
           <div className="text-center mb-16">
             {/* Logo */}
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-8 shadow-lg">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <Wheat className="w-6 h-6 text-green-600" />
-              </div>
+              <svg width="48" height="48" viewBox="0 0 100 100" className="text-green-600">
+                <circle cx="50" cy="50" r="45" fill="currentColor"/>
+                <path d="M35 25 L65 25 L65 35 L55 35 L55 45 L65 45 L65 55 L55 55 L55 65 L45 65 L45 55 L35 55 L35 45 L45 45 L45 35 L35 35 Z" fill="white"/>
+                <circle cx="30" cy="70" r="8" fill="white"/>
+                <circle cx="70" cy="70" r="8" fill="white"/>
+              </svg>
             </div>
             
             <h1 className="text-6xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl">

@@ -22,7 +22,7 @@ const FindWorkSection: React.FC = () => {
       landArea: '10 acres',
       duration: '2 weeks',
       payRate: '₹500/day',
-      paymentType: 'daily',
+      paymentType: 'per-day',
       workersNeeded: 5,
       urgencyLevel: 'high',
       skillLevel: 'experienced',
@@ -35,7 +35,8 @@ const FindWorkSection: React.FC = () => {
       requirements: ['Experience in harvesting', 'Own transportation preferred'],
       status: 'open',
       createdAt: new Date('2025-01-15'),
-      applicationStatus: null // null, 'pending', 'accepted', 'rejected'
+      applicationStatus: null, // null, 'pending', 'accepted', 'rejected'
+      contactInfo: 'Will be revealed after mutual acceptance'
     },
     {
       id: '2',
@@ -48,8 +49,8 @@ const FindWorkSection: React.FC = () => {
       jobTypes: ['general', 'crop-care'],
       landArea: '5 acres',
       duration: '1 month',
-      payRate: '₹400/day',
-      paymentType: 'daily',
+      payRate: '₹15000/month',
+      paymentType: 'per-month',
       workersNeeded: 3,
       urgencyLevel: 'medium',
       skillLevel: 'intermediate',
@@ -62,7 +63,8 @@ const FindWorkSection: React.FC = () => {
       requirements: ['Basic farming knowledge', 'Physical fitness'],
       status: 'open',
       createdAt: new Date('2025-01-14'),
-      applicationStatus: 'pending'
+      applicationStatus: 'pending',
+      contactInfo: 'Will be revealed after mutual acceptance'
     },
     {
       id: '3',
@@ -76,7 +78,7 @@ const FindWorkSection: React.FC = () => {
       landArea: '8 acres',
       duration: '1 week',
       payRate: '₹450/day',
-      paymentType: 'daily',
+      paymentType: 'per-day',
       workersNeeded: 8,
       urgencyLevel: 'medium',
       skillLevel: 'beginner',
@@ -89,7 +91,8 @@ const FindWorkSection: React.FC = () => {
       requirements: ['Willingness to learn', 'Team work'],
       status: 'open',
       createdAt: new Date('2025-01-13'),
-      applicationStatus: 'accepted'
+      applicationStatus: 'accepted',
+      contactInfo: 'Suresh Singh, +91 98765 43210, Village Khed, Pune, Maharashtra'
     }
   ];
 
@@ -351,6 +354,16 @@ const FindWorkSection: React.FC = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Contact Information - Only show if accepted */}
+                {job.applicationStatus === 'accepted' && (
+                  <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h4 className="font-medium text-green-800 mb-2">
+                      {language === 'hi' ? 'संपर्क जानकारी:' : language === 'gu' ? 'સંપર્ક માહિતી:' : 'Contact Information:'}
+                    </h4>
+                    <p className="text-green-700 text-sm">{job.contactInfo}</p>
+                  </div>
+                )}
                 
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">
