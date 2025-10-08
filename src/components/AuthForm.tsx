@@ -179,8 +179,12 @@ const AuthForm: React.FC = () => {
 
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 shadow-lg bg-green-50">
-              {getLogo()}
+            <div className="inline-flex items-center justify-center mb-6">
+              <img 
+                src="/image.png" 
+                alt="FarmConnect Logo" 
+                className="w-20 h-20 object-contain drop-shadow-lg"
+              />
             </div>
             
             <h2 className="text-3xl font-bold text-gray-800 mb-2">

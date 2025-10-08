@@ -53,9 +53,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                <User className="w-6 h-6 text-green-600" />
-              </div>
+              <img 
+                src="/image.png" 
+                alt="FarmConnect Logo" 
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <h3 className="font-semibold text-gray-800">{user?.name}</h3>
                 <p className="text-sm text-gray-600 capitalize">{user?.userType}</p>
@@ -71,9 +73,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
         </div>
         {isCollapsed && (
           <div className="mt-2 flex justify-center">
-            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-              <User className="w-4 h-4 text-green-600" />
-            </div>
+            <img 
+              src="/image.png" 
+              alt="FarmConnect Logo" 
+              className="w-8 h-8 object-contain"
+            />
           </div>
         )}
       </div>

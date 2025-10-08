@@ -72,8 +72,12 @@ const OTPVerification: React.FC = () => {
 
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/50">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <Shield className="w-8 h-8 text-green-600" />
+            <div className="inline-flex items-center justify-center mb-4">
+              <img 
+                src="/image.png" 
+                alt="FarmConnect Logo" 
+                className="w-16 h-16 object-contain drop-shadow-lg"
+              />
             </div>
             
             <h2 className="text-3xl font-bold text-gray-800 mb-2">
