@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Search, CheckCircle, XCircle, Eye } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Search, CheckCircle, XCircle, Eye, Filter } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const FindWorkSection: React.FC = () => {
@@ -7,6 +7,7 @@ const FindWorkSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [workTypeFilter, setWorkTypeFilter] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
 
   const mockJobs = [
