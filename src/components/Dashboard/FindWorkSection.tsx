@@ -178,7 +178,7 @@ const FindWorkSection: React.FC = () => {
 
       {/* Search and Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="flex gap-4 mb-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
@@ -186,50 +186,75 @@ const FindWorkSection: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={language === 'hi' ? 'नौकरी या किसान खोजें' : language === 'gu' ? 'નોકરી અથવા ખેડૂત શોધો' : 'Search job or farmer'}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
-          <div>
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">
-                {language === 'hi' ? 'सभी स्थान' : language === 'gu' ? 'બધા સ્થાનો' : 'All Locations'}
-              </option>
-              <option value="punjab">Punjab</option>
-              <option value="gujarat">Gujarat</option>
-              <option value="maharashtra">Maharashtra</option>
-            </select>
-          </div>
 
-          <div>
-            <select
-              value={workTypeFilter}
-              onChange={(e) => setWorkTypeFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">
-                {language === 'hi' ? 'सभी प्रकार का काम' : language === 'gu' ? 'બધા પ્રકારનું કામ' : 'All Work Types'}
-              </option>
-              <option value="Harvesting">
-                {language === 'hi' ? 'कटाई' : language === 'gu' ? 'લણણી' : 'Harvesting'}
-              </option>
-              <option value="Planting">
-                {language === 'hi' ? 'बुआई' : language === 'gu' ? 'વાવેતર' : 'Planting'}
-              </option>
-              <option value="General Farm Work">
-                {language === 'hi' ? 'सामान्य खेती का काम' : language === 'gu' ? 'સામાન્ય ખેતીનું કામ' : 'General Farm Work'}
-              </option>
-            </select>
-          </div>
-
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          <button 
+            onClick={() => setShowFilters(!showFilters)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+          >
+            <Filter size={18} />
+            <span>
             {language === 'hi' ? 'खोजें' : language === 'gu' ? 'શોધો' : 'Search'}
+            </span>
           </button>
         </div>
+
+        {/* Filter Panel */}
+        {showFilters && (
+          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <select
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  {language === 'hi' ? 'सभी स्थान' : language === 'gu' ? 'બધા સ્થાનો' : 'All Locations'}
+                </option>
+                <option value="punjab">Punjab</option>
+                <option value="gujarat">Gujarat</option>
+                <option value="maharashtra">Maharashtra</option>
+              </select>
+
+              <select
+                value={workTypeFilter}
+                onChange={(e) => setWorkTypeFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">
+                  {language === 'hi' ? 'सभी प्रकार का काम' : language === 'gu' ? 'બધા પ્રકારનું કામ' : 'All Work Types'}
+                </option>
+                <option value="Harvesting">
+                  {language === 'hi' ? 'कटाई' : language === 'gu' ? 'લણણી' : 'Harvesting'}
+                </option>
+                <option value="Planting">
+                  {language === 'hi' ? 'बुआई' : language === 'gu' ? 'વાવેતર' : 'Planting'}
+                </option>
+                <option value="General Farm Work">
+                  {language === 'hi' ? 'सामान्य खेती का काम' : language === 'gu' ? 'સામાન્ય ખેતીનું કામ' : 'General Farm Work'}
+                </option>
+              </select>
+            </div>
+            
+            <div className="flex space-x-3">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                {language === 'hi' ? 'लागू करें' : language === 'gu' ? 'લાગુ કરો' : 'Apply'}
+              </button>
+              <button 
+                onClick={() => {
+                  setLocationFilter('');
+                  setWorkTypeFilter('');
+                }}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                {language === 'hi' ? 'हटाएं' : language === 'gu' ? 'હટાવો' : 'Remove'}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Available Jobs */}

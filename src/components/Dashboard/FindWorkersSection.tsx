@@ -114,7 +114,7 @@ const FindWorkersSection: React.FC = () => {
         </h2>
 
         {/* Search and Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <div className="flex gap-4 mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
@@ -122,48 +122,73 @@ const FindWorkersSection: React.FC = () => {
               placeholder={language === 'hi' ? 'नाम या स्थान खोजें' : language === 'gu' ? 'નામ અથવા સ્થાન શોધો' : 'Search by name or location'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
             />
           </div>
 
-          <select
-            value={selectedExpertise}
-            onChange={(e) => setSelectedExpertise(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-            <option value="">{language === 'hi' ? 'सभी विशेषज्ञता' : language === 'gu' ? 'બધી નિપુણતા' : 'All Expertise'}</option>
-            {jobExpertiseOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label[language as keyof typeof option.label]}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="text"
-            placeholder={language === 'hi' ? 'स्थान' : language === 'gu' ? 'સ્થાન' : 'Location'}
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          />
-
-          <select
-            value={selectedSkillLevel}
-            onChange={(e) => setSelectedSkillLevel(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-            <option value="">{language === 'hi' ? 'सभी स्तर' : language === 'gu' ? 'બધા સ્તર' : 'All Levels'}</option>
-            <option value="beginner">{language === 'hi' ? 'शुरुआती' : language === 'gu' ? 'શરૂઆતી' : 'Beginner'}</option>
-            <option value="intermediate">{language === 'hi' ? 'मध्यम' : language === 'gu' ? 'મધ્યમ' : 'Intermediate'}</option>
-            <option value="experienced">{language === 'hi' ? 'अनुभवी' : language === 'gu' ? 'અનુભવી' : 'Experienced'}</option>
-            <option value="expert">{language === 'hi' ? 'विशेषज्ञ' : language === 'gu' ? 'નિષ્ણાત' : 'Expert'}</option>
-          </select>
 
           <button className="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            onClick={() => setShowFilters(!showFilters)}
             <Filter size={18} className="mr-2" />
             {language === 'hi' ? 'फ़िल्टर' : language === 'gu' ? 'ફિલ્ટર' : 'Filter'}
           </button>
         </div>
+
+        {/* Filter Panel */}
+        {showFilters && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <select
+                value={selectedExpertise}
+                onChange={(e) => setSelectedExpertise(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">{language === 'hi' ? 'सभी विशेषज्ञता' : language === 'gu' ? 'બધી નિપુણતા' : 'All Expertise'}</option>
+                {jobExpertiseOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label[language as keyof typeof option.label]}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                type="text"
+                placeholder={language === 'hi' ? 'स्थान' : language === 'gu' ? 'સ્થાન' : 'Location'}
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+
+              <select
+                value={selectedSkillLevel}
+                onChange={(e) => setSelectedSkillLevel(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">{language === 'hi' ? 'सभी स्तर' : language === 'gu' ? 'બધા સ્તર' : 'All Levels'}</option>
+                <option value="beginner">{language === 'hi' ? 'शुरुआती' : language === 'gu' ? 'શરૂઆતી' : 'Beginner'}</option>
+                <option value="intermediate">{language === 'hi' ? 'मध्यम' : language === 'gu' ? 'મધ્યમ' : 'Intermediate'}</option>
+                <option value="experienced">{language === 'hi' ? 'अनुभवी' : language === 'gu' ? 'અનુભવી' : 'Experienced'}</option>
+                <option value="expert">{language === 'hi' ? 'विशेषज्ञ' : language === 'gu' ? 'નિષ્ણાત' : 'Expert'}</option>
+              </select>
+            </div>
+            
+            <div className="flex space-x-3">
+              <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                {language === 'hi' ? 'लागू करें' : language === 'gu' ? 'લાગુ કરો' : 'Apply'}
+              </button>
+              <button 
+                onClick={() => {
+                  setSelectedExpertise('');
+                  setSelectedLocation('');
+                  setSelectedSkillLevel('');
+                }}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                {language === 'hi' ? 'हटाएं' : language === 'gu' ? 'હટાવો' : 'Remove'}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Workers Grid */}

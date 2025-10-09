@@ -30,8 +30,8 @@ const Dashboard: React.FC = () => {
         return <LeaseAssetsSection />;
       case 'news':
         return <NewsSection />;
-      case 'notifications':
-        return <NotificationsSection />;
+      case 'applications':
+        return <ApplicationsSection />;
       default:
         return <HomeSection />;
     }

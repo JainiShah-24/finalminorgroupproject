@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Clock, DollarSign, Users, Eye, CreditCard as Edit, Trash2, CheckCircle, Plus, X, Upload } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Eye, Edit, Trash2, CheckCircle, Plus, X, Upload } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { indianStatesAndCities } from '../../utils/cityData';
 
@@ -27,7 +27,10 @@ const JobListingsSection: React.FC = () => {
     state: '',
     city: '',
     jobDescription: '',
-    contactInfo: user?.fullAddress || ''
+    // Contact information fields
+    email: user?.email || '',
+    contactNumber: user?.contactNumber || '',
+    fullAddress: user?.fullAddress || ''
   });
 
   const jobTypes = [
@@ -112,7 +115,9 @@ const JobListingsSection: React.FC = () => {
       state: '',
       city: '',
       jobDescription: '',
-      contactInfo: user?.fullAddress || ''
+      email: user?.email || '',
+      contactNumber: user?.contactNumber || '',
+      fullAddress: user?.fullAddress || ''
     });
     setJobImages([]);
   };
@@ -576,27 +581,60 @@ const JobListingsSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Contact Information */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+              {/* Contact Information Section */}
+              <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">
                   {language === 'hi' ? 'संपर्क जानकारी' : language === 'gu' ? 'સંપર્ક માહિતી' : 'Contact Information'}
-                  <span className="text-red-500 ml-1">*</span>
-                </label>
-                <textarea
-                  value={jobData.contactInfo}
-                  onChange={(e) => setJobData({...jobData, contactInfo: e.target.value})}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder={language === 'hi' ? 'पूरा पता और संपर्क विवरण' : 
-                             language === 'gu' ? 'સંપૂર્ણ સરનામું અને સંપર્ક વિગતો' : 
-                             'Full address and contact details'}
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {language === 'hi' ? 'नोट: संपर्क जानकारी केवल तभी दिखाई जाएगी जब दोनों पक्ष अनुरोध स्वीकार करें।' :
-                   language === 'gu' ? 'નોંધ: સંપર્ક માહિતી ત્યારે જ દેખાશે જ્યારે બંને પક્ષો વિનંતી સ્વીકારે.' :
-                   'Note: Contact information will be revealed only when both parties accept the request.'}
+                </h4>
+                <p className="text-sm text-blue-700 mb-4">
+                  {language === 'hi' ? 'यह जानकारी केवल तभी दिखाई जाएगी जब दोनों पक्ष अनुरोध स्वीकार करें।' :
+                   language === 'gu' ? 'આ માહિતી ત્યારે જ દેખાશે જ્યારે બંને પક્ષો વિનંતી સ્વીકારે.' :
+                   'This information will be revealed only when both parties accept the request.'}
                 </p>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {language === 'hi' ? 'ईमेल' : language === 'gu' ? 'ઈમેઈલ' : 'Email'}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={jobData.email}
+                      onChange={(e) => setJobData({...jobData, email: e.target.value})}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {language === 'hi' ? 'संपर्क नंबर' : language === 'gu' ? 'સંપર્ક નંબર' : 'Contact Number'}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={jobData.contactNumber}
+                      onChange={(e) => setJobData({...jobData, contactNumber: e.target.value})}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {language === 'hi' ? 'पूरा पता' : language === 'gu' ? 'સંપૂર્ણ સરનામું' : 'Full Address'}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <textarea
+                    value={jobData.fullAddress}
+                    onChange={(e) => setJobData({...jobData, fullAddress: e.target.value})}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  />
+                </div>
               </div>
 
               {/* Job Description (Optional) */}
@@ -682,71 +720,6 @@ const JobListingsSection: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Job Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-800">
-                {mockJobs.filter(job => job.status === 'open').length}
-              </p>
-              <p className="text-sm text-gray-600">
-                {language === 'hi' ? 'खुली नौकरियां' : language === 'gu' ? 'ખુલ્લી નોકરીઓ' : 'Open Jobs'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-800">
-                {mockJobs.reduce((sum, job) => sum + job.applicants, 0)}
-              </p>
-              <p className="text-sm text-gray-600">
-                {language === 'hi' ? 'कुल आवेदन' : language === 'gu' ? 'કુલ અરજીઓ' : 'Total Applications'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-yellow-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-800">2</p>
-              <p className="text-sm text-gray-600">
-                {language === 'hi' ? 'प्रगति में' : language === 'gu' ? 'પ્રગતિમાં' : 'In Progress'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-800">
-                ₹{mockJobs.reduce((sum, job) => sum + parseInt(job.salaryAmount) * job.workersNeeded, 0).toLocaleString()}
-              </p>
-              <p className="text-sm text-gray-600">
-                {language === 'hi' ? 'कुल बजेट' : language === 'gu' ? 'કુલ બજેટ' : 'Total Budget'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Job Listings */}
       <div className="grid gap-6">

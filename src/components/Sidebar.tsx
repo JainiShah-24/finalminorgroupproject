@@ -33,6 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
     { id: 'profile', icon: User, label: 'Profile' },
     { id: 'find-workers', icon: Users, label: 'Find Workers' },
     { id: 'job-listings', icon: List, label: 'Job Listings' },
+    { id: 'applications', icon: Bell, label: 'Applications' },
     { id: 'lease-assets', icon: Wrench, label: 'Lease Land & Equipment' },
     { id: 'news', icon: BookOpen, label: 'News & Education' },
   ];
@@ -41,6 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'profile', icon: User, label: 'Profile' },
     { id: 'find-work', icon: Briefcase, label: 'Find Work' },
+    { id: 'applications', icon: Bell, label: 'Applications' },
     { id: 'news', icon: BookOpen, label: 'News & Education' },
   ];
 

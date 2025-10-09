@@ -70,7 +70,7 @@ const LandingPage: React.FC = () => {
               <img 
                 src="/image.png" 
                 alt="FarmConnect Logo" 
-                className="w-24 h-24 object-contain drop-shadow-lg"
+                className="w-24 h-24 object-cover rounded-full drop-shadow-lg border-4 border-white"
               />
             </div>
             

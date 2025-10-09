@@ -76,7 +76,7 @@ const OTPVerification: React.FC = () => {
               <img 
                 src="/image.png" 
                 alt="FarmConnect Logo" 
-                className="w-16 h-16 object-contain drop-shadow-lg"
+                className="w-16 h-16 object-cover rounded-full drop-shadow-lg border-4 border-white"
               />
             </div>
             

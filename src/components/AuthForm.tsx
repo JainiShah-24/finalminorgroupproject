@@ -314,20 +314,22 @@ const AuthForm: React.FC = () => {
                 </div>
 
                 {/* Full Address */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Address <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    name="fullAddress"
-                    value={formData.fullAddress}
-                    onChange={handleChange}
-                    rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
-                    placeholder="Enter your complete address"
-                    required
-                  />
-                </div>
+                {userType === 'farmer' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Address <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      name="fullAddress"
+                      value={formData.fullAddress}
+                      onChange={handleChange}
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white font-medium"
+                      placeholder="Enter your complete address"
+                      required
+                    />
+                  </div>
+                )}
 
                 {/* Worker Specific Fields */}
                 {userType === 'worker' && (

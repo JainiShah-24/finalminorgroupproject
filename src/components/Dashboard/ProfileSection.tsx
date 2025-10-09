@@ -6,21 +6,26 @@ const ProfileSection: React.FC = () => {
   const { user, language } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [previewUrl, setPreviewUrl] = useState<string>(user?.profilePicture || '');
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     contactNumber: user?.contactNumber || '',
     email: user?.email || '',
     city: user?.city || '',
     state: user?.state || '',
+    fullAddress: user?.fullAddress || '',
     // Worker specific fields
     jobExpertise: user?.jobExpertise?.join(', ') || '',
+    customJobExpertise: user?.customJobExpertise || '',
     skillLevel: user?.skillLevel || '',
     workCapacity: user?.workCapacity || '',
     accommodationNeeded: user?.accommodationNeeded || false,
     timeAvailability: user?.timeAvailability || '',
+    availabilityDuration: user?.availabilityDuration || '',
     requiredSalary: user?.requiredSalary || '',
-    additionalBenefits: user?.additionalBenefits?.join(', ') || ''
+    salaryType: user?.salaryType || '',
+    additionalBenefits: user?.additionalBenefits?.join(', ') || '',
+    customAdditionalBenefits: user?.customAdditionalBenefits || ''
   });
 
   const handleSave = () => {
@@ -84,9 +89,9 @@ const ProfileSection: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="text-center">
               <div className="relative inline-block">
-                {previewUrl || user?.profilePicture ? (
+                {previewUrl ? (
                   <img
-                    src={previewUrl || user?.profilePicture}
+                    src={previewUrl}
                     alt="Profile"
                     className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg"
                   />
@@ -206,6 +211,25 @@ const ProfileSection: React.FC = () => {
               </div>
             </div>
 
+            {/* Full Address - Only for Farmers */}
+            {user?.userType === 'farmer' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'पूरा पता' : language === 'gu' ? 'સંપૂર્ણ સરનામું' : 'Full Address'}
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={profileData.fullAddress}
+                    onChange={(e) => handleInputChange('fullAddress', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  />
+                ) : (
+                  <p className="py-2 text-gray-800">{profileData.fullAddress || 'Not provided'}</p>
+                )}
+              </div>
+            )}
+
             {/* Worker Specific Fields */}
             {user?.userType === 'worker' && (
               <>
@@ -226,6 +250,15 @@ const ProfileSection: React.FC = () => {
                     <p className="py-2 text-gray-800">{profileData.jobExpertise || 'Not specified'}</p>
                   )}
                 </div>
+
+                {profileData.customJobExpertise && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {language === 'hi' ? 'अन्य विशेषज्ञता' : language === 'gu' ? 'અન્ય નિપુણતા' : 'Other Expertise'}
+                    </label>
+                    <p className="py-2 text-gray-800">{profileData.customJobExpertise}</p>
+                  </div>
+                )}
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -294,71 +327,40 @@ const ProfileSection: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'hi' ? 'आवश्यक वेतन' : language === 'gu' ? 'જરૂરી પગાર' : 'Required Salary'}
+                      {language === 'hi' ? 'उपलब्धता अवधि' : language === 'gu' ? 'ઉપલબ્ધતા અવધિ' : 'Availability Duration'}
                     </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={profileData.requiredSalary}
-                        onChange={(e) => handleInputChange('requiredSalary', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        placeholder="₹500/day or ₹15000/month"
-                      />
-                    ) : (
-                      <p className="py-2 text-gray-800">{profileData.requiredSalary || 'Not specified'}</p>
-                    )}
+                    <p className="py-2 text-gray-800 capitalize">{profileData.availabilityDuration || 'Not specified'}</p>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'hi' ? 'आवास की आवश्यकता' : language === 'gu' ? 'આવાસની જરૂર' : 'Accommodation Needed'}
-                  </label>
-                  {isEditing ? (
-                    <div className="flex space-x-4">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name="accommodationNeeded"
-                          checked={profileData.accommodationNeeded === true}
-                          onChange={() => handleInputChange('accommodationNeeded', true)}
-                          className="mr-2"
-                        />
-                        Yes
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name="accommodationNeeded"
-                          checked={profileData.accommodationNeeded === false}
-                          onChange={() => handleInputChange('accommodationNeeded', false)}
-                          className="mr-2"
-                        />
-                        No
-                      </label>
-                    </div>
-                  ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {language === 'hi' ? 'आवश्यक वेतन' : language === 'gu' ? 'જરૂરી પગાર' : 'Required Salary'}
+                    </label>
+                    <p className="py-2 text-gray-800">
+                      ₹{profileData.requiredSalary} {profileData.salaryType ? `/${profileData.salaryType.replace('per-', '')}` : ''}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {language === 'hi' ? 'आवास की आवश्यकता' : language === 'gu' ? 'આવાસની જરૂર' : 'Accommodation Needed'}
+                    </label>
                     <p className="py-2 text-gray-800">
                       {profileData.accommodationNeeded ? 'Yes' : 'No'}
                     </p>
-                  )}
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {language === 'hi' ? 'अतिरिक्त लाभ' : language === 'gu' ? 'વધારાના ફાયદા' : 'Additional Benefits'}
                   </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={profileData.additionalBenefits}
-                      onChange={(e) => handleInputChange('additionalBenefits', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      placeholder="Housing, Food, Health Insurance, etc."
-                    />
-                  ) : (
-                    <p className="py-2 text-gray-800">{profileData.additionalBenefits || 'None specified'}</p>
-                  )}
+                  <p className="py-2 text-gray-800">
+                    {profileData.additionalBenefits || 'None specified'}
+                    {profileData.customAdditionalBenefits && `, ${profileData.customAdditionalBenefits}`}
+                  </p>
                 </div>
               </>
             )}
