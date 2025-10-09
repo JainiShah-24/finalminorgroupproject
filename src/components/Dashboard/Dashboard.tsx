@@ -9,6 +9,7 @@ import LeaseAssetsSection from './LeaseAssetsSection';
 import NewsSection from './NewsSection';
 import JobListingsSection from './JobListingsSection';
 import NotificationsSection from './NotificationsSection';
+import ApplicationsSection from './ApplicationsSection';
 
 const Dashboard: React.FC = () => {
   const { user } = useApp();
