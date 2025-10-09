@@ -22,6 +22,7 @@ interface Worker {
 const FindWorkersSection: React.FC = () => {
   const { language } = useApp();
   const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [selectedExpertise, setSelectedExpertise] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedSkillLevel, setSelectedSkillLevel] = useState('');
